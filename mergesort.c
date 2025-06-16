@@ -45,7 +45,7 @@ int main(int argc, char *argv[]) {
 
     printf("\nTempo de execução: %.6f segundos\n", total_time);
 */
-    printf("%d;%6f;\n", tamanho,total_time);
+    printf("Merge Sort,%d,%f,C\n", tamanho, total_time);
 
     free(arr); // Libera a memória alocada para o array
 
