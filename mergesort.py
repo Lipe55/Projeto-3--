@@ -1,51 +1,61 @@
-import sys;
+import sys
 from array import array
-import random;
-import time;
-import string;
-import os.path ## para verificar se existe o arquivo
+import random
+import time
 
-def mergesort(lista):
-    tamanho_da_lista = len(lista) - 1
+def mergesort(arr, inicio, fim):
+    if inicio < fim:
+        meio = (inicio + fim) // 2
+        mergesort(arr, inicio, meio)
+        mergesort(arr, meio + 1, fim)
+        merge(arr, inicio, meio, fim)
 
-    for posicao_atual in range(0, tamanho_da_lista):
-        posicao_menor = posicao_atual
-        menor_nome = lista[posicao_menor]
+def merge(arr, inicio, meio, fim):
+    esquerda = arr[inicio:meio + 1]
+    direita = arr[meio + 1:fim + 1]
 
-        for posicao_busca in range(posicao_atual, tamanho_da_lista):
-            nome_busca = lista[posicao_busca + 1]
+    i = j = 0
+    k = inicio
 
-            if menor_nome > nome_busca:
-                menor_nome = nome_busca
-                posicao_menor = posicao_busca + 1
+    while i < len(esquerda) and j < len(direita):
+        if esquerda[i] <= direita[j]:
+            arr[k] = esquerda[i]
+            i += 1
+        else:
+            arr[k] = direita[j]
+            j += 1
+        k += 1
 
-        if posicao_menor != posicao_atual:
-            menor_nome = lista[posicao_menor]
-            lista[posicao_menor] = lista[posicao_atual]
-            lista[posicao_atual] = menor_nome
+    while i < len(esquerda):
+        arr[k] = esquerda[i]
+        i += 1
+        k += 1
 
-    return lista
+    while j < len(direita):
+        arr[k] = direita[j]
+        j += 1
+        k += 1
 
 #------------------------Main
-parameters = [];
+parameters = []
 for param in sys.argv:
-	parameters.append(param)
-#print (parameters)	
-if (len(parameters)) > 1:
-	valor 	= int(parameters[1]) 	#---numero de elementos do vetor
+    parameters.append(param)
+
+if len(parameters) > 1:
+    valor = int(parameters[1])
 else:
-	print ("Digitado "+str(len(parameters))+" parametros, é preciso 2 ")
-	print ("ERROR nos parametros: python merge.py [numero_de_entradas]")
-	print ("EXEMPLO python merge.py 200")
-	exit()
-##----------------------------------------------------------------------
-i=0
-alist = []
-for i in range (valor):
-	alist.append(random.randrange(0,valor))	
-	i=i+1
-tempo_inicial = time.time() # em segundos
-mergesort(alist)
-tempo_final=time.time()# em segundos
-print(f"Merge Sort;{valor};{tempo_final - tempo_inicial};Python")
-#print(alist)
+    print("Digitado " + str(len(parameters)) + " parâmetros, é preciso 2.")
+    print("ERRO nos parâmetros: python mergesort.py [numero_de_entradas]")
+    print("EXEMPLO: python mergesort.py 200")
+    exit()
+
+# Gera array de inteiros com valores aleatórios
+alist = array('i', [random.randrange(0, valor) for _ in range(valor)])
+
+tempo_inicial = time.time()
+mergesort(alist, 0, len(alist) - 1)
+tempo_final = time.time()
+
+print(f"{valor},{tempo_final - tempo_inicial},")
+
+# print(alist)  # Descomente para imprimir a lista ordenada

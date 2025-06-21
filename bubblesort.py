@@ -34,5 +34,5 @@ for i in range (valor):
 tempo_inicial = time.time() # em segundos
 bubbleSort(alist)
 tempo_final=time.time()# em segundos
-print (str(valor)+";"+str(tempo_final - tempo_inicial)+";")
+print(f"{valor},{valor},{tempo_final - tempo_inicial},")
 #print(alist)

@@ -1,11 +1,9 @@
 #!/bin/bash
 
-
 usage() {
     echo "Uso: $0 -l [c|python] -a [bubble|merge] -n [n_execucoes] -t [tamanho_entrada]"
     exit 1
 }
-
 
 while getopts ":l:a:n:t:" opt; do
   case $opt in
@@ -25,51 +23,47 @@ fi
 
 if [ "$algoritmo" = "merge" ]; then
     nome_algoritmo="Merge Sort"
+    base_algoritmo="mergesort"
 elif [ "$algoritmo" = "bubble" ]; then
     nome_algoritmo="Bubble Sort"
+    base_algoritmo="bubblesort"
 else
     nome_algoritmo="${algoritmo^}"
+    base_algoritmo="${algoritmo,,}"
 fi
 
 saida_csv="tempos.csv"
-
-
-if [ ! -f "$saida_csv" ]; then
-    echo "Algoritmo,Tamanho,Tempo,Linguagem" > "$saida_csv"
-fi
-
+[ ! -f "$saida_csv" ] && echo "Algoritmo,Tamanho,Tempo,Linguagem" > "$saida_csv"
 
 soma=0
 
-
 for ((i=1; i<=execucoes; i++)); do
     if [ "$linguagem" = "python" ]; then
-        saida=$(python3 ${algoritmo}.py $tamanho)
+        saida=$(python3 ${base_algoritmo}.py $tamanho)
+        tempo=$(echo "$saida" | cut -d',' -f3)
     elif [ "$linguagem" = "c" ]; then
         ./a.out $tamanho > .temp_saida
         saida=$(cat .temp_saida)
+        tempo=$(echo "$saida" | cut -d',' -f3)
     else
         echo "Linguagem inválida: $linguagem"
         exit 1
     fi
 
-    
-    tempo=$(echo "$saida" | cut -d';' -f2 | tr -d ';')
-
-    
+    echo ">> Tempo capturado: $tempo"
     echo "$nome_algoritmo,$tamanho,$tempo,${linguagem^}" >> "$saida_csv"
-
-   
-    soma=$(echo "$soma + $tempo" | bc -l)
+    soma=$(awk "BEGIN {print $soma + $tempo}")
 done
 
-
-media=$(echo "$soma / $execucoes" | bc -l)
-
-
+media=$(awk "BEGIN {print $soma / $execucoes}")
 echo "Tamanho: $tamanho | Execuções: $execucoes | Tempo médio: $media s"
 
 
-gnuplot grafico.gnuplot
+arquivo_saida="media_${linguagem}_${base_algoritmo}.csv"
+[ ! -f "$arquivo_saida" ] && echo "Algoritmo,Tamanho,Media,Linguagem" > "$arquivo_saida"
+echo "$nome_algoritmo,$tamanho,$media,${linguagem^}" >> "$arquivo_saida"
+echo "Média salva em: $arquivo_saida"
 
+
+gnuplot grafico.gnuplot
 echo "Gráfico atualizado: grafico.png"

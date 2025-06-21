@@ -7,6 +7,7 @@ set ylabel "Tempo (s)"
 set key outside right top box
 set grid
 set datafile separator ","
+set datafile columnheaders
 set logscale x
 
 plot \
