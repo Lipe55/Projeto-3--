@@ -1,6 +1,7 @@
 Algoritmo,Tamanho,Media,Linguagem
-Bubblesort,1,14905000000000,Python
-Bubblesort,10,91225000000000,Python
-Bubblesort,100,22094,2,Python
-Bubblesort,1000,20635,7,Python
-Bubblesort,10000,,Python
+Bubblesort,1,.00000810623168945312,Python
+Bubblesort,10,.00003314018249511718,Python
+Bubblesort,100,.00162384510040283202,Python
+Bubblesort,1000,.16043536663055420199,Python
+Bubblesort,10000,13.38936381340026839994,Python
+Bubblesort,100000,1445.83580241203309000308,Python
