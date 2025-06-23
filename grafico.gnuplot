@@ -1,17 +1,20 @@
-set terminal pngcairo size 1000,700 enhanced font 'Verdana,12'
-set output 'grafico.png'
+set terminal pngcairo size 1000,600 enhanced font "Verdana,10"
+set output "grafico.png"
 
-set title "Comparação de Algoritmos de Ordenação"
-set xlabel "Tamanho do vetor"
-set ylabel "Tempo (s)"
-set key outside right top box
+set title "Tempo médio de execução por algoritmo"
+set xlabel "Tamanho da entrada"
+set ylabel "Tempo médio (s)"
 set grid
+set key outside
 set datafile separator ","
-set datafile columnheaders
-set logscale x
+
+set logscale y 10
+set logscale x 10  # <<< Coloque também log no eixo X (opcional)
+
+set xtics ("1" 1, "10" 10, "100" 100, "1k" 1000, "10k" 10000, "1M" 1000000)
 
 plot \
-    'tempos.csv' every ::1 using (strcol(1) eq "Bubble Sort" && strcol(4) eq "C"      ? $2 : 1/0):($3) with linespoints lt 1 lw 2 pt 7 lc rgb "blue"    title "Bubble Sort (C)", \
-    ''           every ::1 using (strcol(1) eq "Merge Sort"  && strcol(4) eq "C"      ? $2 : 1/0):($3) with linespoints lt 1 lw 2 pt 5 lc rgb "green"   title "Merge Sort (C)", \
-    ''           every ::1 using (strcol(1) eq "Bubble Sort" && strcol(4) eq "Python" ? $2 : 1/0):($3) with linespoints lt 1 lw 2 pt 9 lc rgb "red"     title "Bubble Sort (Python)", \
-    ''           every ::1 using (strcol(1) eq "Merge Sort"  && strcol(4) eq "Python" ? $2 : 1/0):($3) with linespoints lt 1 lw 2 pt 13 lc rgb "violet" title "Merge Sort (Python)"
+    'media_c_bubblesort.csv'               using 2:3 with linespoints lt 1 pt 7 lc rgb "blue"    title "Bubblesort (C)", \
+    'media_c_mergesort.csv'                using 2:3 with linespoints lt 1 pt 5 lc rgb "green"   title "Mergesort (C)", \
+    'media_python_bubblesort.csv'          using 2:3 with linespoints lt 1 pt 9 lc rgb "red"     title "Bubblesort (Python)", \
+    'media_python_mergesort.csv'           using 2:3 with linespoints lt 1 pt 13 lc rgb "violet" title "Mergesort (Python)"
